@@ -1,0 +1,20 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Стив",
+      "age": 21,
+      "avatar": "🧱",
+      "tags": ["Survival", "Redstone", "PvE"],
+      "password": "12345"
+    },
+    {
+      "id": 2,
+      "name": "Алекс",
+      "age": 19,
+      "avatar": "⛏️",
+      "tags": ["Build", "Creative"],
+      "password": "alexpass"
+    }
+  ]
+}
