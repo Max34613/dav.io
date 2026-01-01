@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>КвадраСвап — знакомства для майнкрафтеров</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: linear-gradient(135deg, #2e7d32, #1b5e20);
+      color: #fff; min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    }
+    .app { width: 380px; background: #0f2a17; border-radius: 16px; padding: 16px; box-shadow: 0 20px 40px rgba(0,0,0,.4); }
+    h1 { margin: 8px 0; text-align: center; }
+    .hidden { display: none; }
+    input { width: 100%; padding: 10px; margin: 6px 0; border-radius: 8px; border: none; }
+    button { border: none; border-radius: 999px; padding: 12px; cursor: pointer; font-weight: 600; width: 100%; margin-top: 8px; }
+    .primary { background: #2e7d32; color: #fff; }
+    .card { background: #143d23; border-radius: 14px; overflow: hidden; margin: 12px 0; }
+    .avatar { height: 200px; background: repeating-linear-gradient(45deg,#66bb6a,#66bb6a 10px,#81c784 10px,#81c784 20px); display:flex;align-items:center;justify-content:center;font-size:64px; }
+    .info { padding: 12px; }
+    .tags { display:flex; gap:6px; flex-wrap:wrap; }
+    .tag { background:#1e6f3b; padding:4px 8px; border-radius:999px; font-size:12px; }
+    .actions { display:flex; gap:10px; }
+    .nope { background:#c62828; color:#fff; }
+    .like { background:#2e7d32; color:#fff; }
+    footer { text-align:center; opacity:.6; font-size:12px; }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <!-- РЕГИСТРАЦИЯ -->
+  <div id="register">
+    <h1>Регистрация</h1>
+    <input id="name" placeholder="Никнейм + возраст (Стив, 21)" />
+    <input id="avatar" placeholder="Эмодзи (🧱 ⛏️ 🐲)" />
+    <input id="tags" placeholder="Интересы через запятую" />
+    <button class="primary" onclick="register()">Зарегистрироваться</button>
+  </div>
+
+  <!-- ЛЕНТА -->
+  <div id="feed" class="hidden">
+    <h1>КвадраСвап</h1>
+    <div class="card">
+      <div class="avatar" id="fAvatar">🧱</div>
+      <div class="info">
+        <h2 id="fName"></h2>
+        <div class="tags" id="fTags"></div>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="nope" onclick="next(false)">✖</button>
+      <button class="like" onclick="next(true)">❤</button>
+    </div>
+    <footer>Показываются только зарегистрированные игроки</footer>
+  </div>
+
+</div>
+
+<script>
+  let profiles = JSON.parse(localStorage.getItem('profiles') || '[]');
+  let index = 0;
+
+  function register() {
+    const name = document.getElementById('name').value.trim();
+    const avatar = document.getElementById('avatar').value.trim() || '🧱';
+    const tags = document.getElementById('tags').value.split(',').map(t=>t.trim()).filter(Boolean);
+    if (!name) return alert('Введи ник');
+    profiles.push({ name, avatar, tags });
+    localStorage.setItem('profiles', JSON.stringify(profiles));
+    document.getElementById('register').classList.add('hidden');
+    document.getElementById('feed').classList.remove('hidden');
+    index = profiles.length - 1;
+    show();
+  }
+
+  function show() {
+    if (!profiles.length) return;
+    const p = profiles[index % profiles.length];
+    document.getElementById('fName').textContent = p.name;
+    document.getElementById('fAvatar').textContent = p.avatar;
+    const tags = document.getElementById('fTags'); tags.innerHTML='';
+    p.tags.forEach(t=>{ const s=document.createElement('span'); s.className='tag'; s.textContent=t; tags.appendChild(s); });
+  }
+
+  function next(like) { index++; show(); }
+</script>
+</body>
+</html>
